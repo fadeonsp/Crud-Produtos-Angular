@@ -1,0 +1,30 @@
+import { Component, OnInit } from '@angular/core';
+import { Produto } from '../shared/produto';
+import { ProdutoService } from '../shared/produto.service';
+
+@Component({
+  selector: 'app-produto-list',
+  templateUrl: './produto-list.component.html',
+  styleUrls: ['./produto-list.component.css']
+})
+export class ProdutoListComponent implements OnInit {
+
+  title: string = 'produtos';
+  produtos: Produto[];
+
+  constructor(private produtoService: ProdutoService) { }
+
+  ngOnInit(): void {
+    this.getAll();
+  }
+  getAll() {
+    this.produtoService.getAll().subscribe(resp => {
+      this.produtos = resp;
+    });
+  }
+  remove(produto: Produto) {
+    this.produtoService.remove(produto.id).subscribe(() => {
+      this.produtos = this.produtos.filter(p => p !== produto);
+    });
+  }
+}
